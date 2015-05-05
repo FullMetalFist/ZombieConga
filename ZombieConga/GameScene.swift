@@ -29,6 +29,12 @@ class GameScene: SKScene {
         background.zPosition = -1
         addChild(background)
         
+        // challenge
+        let zomBee = SKSpriteNode(imageNamed: "zombie1")
+        zomBee.position = CGPoint(x: 400, y: 400)
+        zomBee.anchorPoint = CGPoint(x: 0, y: 0)
+        addChild(zomBee)
+        
 //        let theSize = background.size
 //        println("Size: \(theSize)")
     }

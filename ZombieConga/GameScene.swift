@@ -13,8 +13,8 @@ class GameScene: SKScene {
         backgroundColor = SKColor.whiteColor()
         let background = SKSpriteNode(imageNamed: "background1")
 //        background.position = CGPoint(x: size.width/2, y: size.height/2)
-        background.anchorPoint = CGPointZero
-        background.position = CGPointZero
+//        background.anchorPoint = CGPointZero
+//        background.position = CGPointZero
 //        background.zRotation = CGFloat(M_PI)/8
         
         // interesting discovery...
@@ -23,6 +23,13 @@ class GameScene: SKScene {
         // background spins across the center.
         // otherwise, the background spins depending on
         // where the anchor point is placed.
+        
+        background.position = CGPoint(x: size.width/2, y: size.height/2)
+        background.anchorPoint = CGPoint(x: 0.5, y: 0.5)    // default
+        background.zPosition = -1
         addChild(background)
+        
+//        let theSize = background.size
+//        println("Size: \(theSize)")
     }
 }

@@ -33,6 +33,8 @@ class GameScene: SKScene {
         let zomBee = SKSpriteNode(imageNamed: "zombie1")
         zomBee.position = CGPoint(x: 400, y: 400)
         zomBee.anchorPoint = CGPoint(x: 0, y: 0)
+        zomBee.size = CGSizeMake(400, 400)  // more control
+        zomBee.setScale(2.0)                // easier, default
         addChild(zomBee)
         
 //        let theSize = background.size

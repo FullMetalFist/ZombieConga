@@ -16,6 +16,19 @@ class GameScene: SKScene {
     var dt: NSTimeInterval = 0
     let zomBeeMovePointsPerSec: CGFloat = 480.0
     var velocity = CGPointZero
+    let playableRect: CGRect
+    
+    override init(size: CGSize) {
+        let maxApsectRatio: CGFloat = 16.0 / 9.0                    // 1
+        let playableHeight = size.width / maxApsectRatio            // 2
+        let playableMargin = (size.height - playableHeight) / 2.0   // 3
+        playableRect = CGRect(x: 0, y: playableMargin, width: size.width, height: playableHeight)   // 4
+        super.init(size: size)  // 5
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")         // 6
+    }
     
     override func didMoveToView(view: SKView) {
         backgroundColor = SKColor.whiteColor()
@@ -44,6 +57,8 @@ class GameScene: SKScene {
         
         addChild(zomBee)
         
+        debugDrawPlayableArea()
+        
 //        let theSize = background.size
 //        println("Size: \(theSize)")
     }
@@ -59,6 +74,8 @@ class GameScene: SKScene {
 //        zomBee.position = CGPoint(x: zomBee.position.x + 4, y: zomBee.position.y)
 //        moveSprite(zomBee, velocity: CGPoint(x: zomBeeMovePointsPerSec, y: 0))
         moveSprite(zomBee, velocity: velocity)
+        rotateSprite(zomBee, direction: velocity)
+        boundsCheckZombie()
     }
     
     func moveSprite(sprite: SKSpriteNode, velocity: CGPoint) {
@@ -91,5 +108,41 @@ class GameScene: SKScene {
         let touchLocation = touch.locationInNode(self)
         sceneTouched(touchLocation)
     }
-    //
+    
+    // bounds checking
+    func boundsCheckZombie() {
+        let bottomLeft = CGPoint(x: 0, y: CGRectGetMinY(playableRect))
+        let topRight = CGPoint(x: size.width, y: CGRectGetMaxY(playableRect))
+        
+        if zomBee.position.x <= bottomLeft.x {
+            zomBee.position.x = bottomLeft.x
+            velocity.x = -velocity.x
+        }
+        if zomBee.position.x >= topRight.x {
+            zomBee.position.x = topRight.x
+            velocity.x = -velocity.x
+        }
+        if zomBee.position.y <= bottomLeft.y {
+            zomBee.position.y = bottomLeft.y
+            velocity.y = -velocity.y
+        }
+        if zomBee.position.y >= topRight.y {
+            zomBee.position.y = topRight.y
+            velocity.y = -velocity.y
+        }
+    }
+    
+    func debugDrawPlayableArea() {
+        let shape = SKShapeNode()
+        let path = CGPathCreateMutable()
+        CGPathAddRect(path, nil, playableRect)
+        shape.path = path
+        shape.strokeColor = SKColor.redColor()
+        shape.lineWidth = 4.0
+        addChild(shape)
+    }
+    
+    func rotateSprite(sprite: SKSpriteNode, direction: CGPoint) {
+        sprite.zRotation = CGFloat(atan2(Double(direction.y), Double(direction.x)))
+    }
 }

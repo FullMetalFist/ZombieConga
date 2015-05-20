@@ -79,18 +79,16 @@ class GameScene: SKScene {
     }
     
     func moveSprite(sprite: SKSpriteNode, velocity: CGPoint) {
-        // 1
-        let amountToMove = CGPoint(x:velocity.x * CGFloat(dt), y:velocity.y * CGFloat(dt))
+        let amountToMove = velocity * CGFloat(dt)
         println("Amount To Move: \(amountToMove)")
-        // 2
-        sprite.position = CGPoint(x:  sprite.position.x + amountToMove.x, y: sprite.position.y + amountToMove.y)
+        sprite.position += amountToMove
     }
     
     func moveZomBeeToward(location: CGPoint) {
-        let offset = CGPoint(x: location.x - zomBee.position.x, y: location.y - zomBee.position.y)
+        let offset = location - zomBee.position
         let length = sqrt(Double(offset.x * offset.x + offset.y * offset.y))
-        let direction = CGPoint(x: offset.x / CGFloat(length), y: offset.y / CGFloat(length))
-        velocity = CGPoint(x: direction.x * zomBeeMovePointsPerSec, y: direction.y * zomBeeMovePointsPerSec)
+        let direction = offset / CGFloat(length)
+        velocity = direction * zomBeeMovePointsPerSec
     }
     
     func sceneTouched(touchLocation:CGPoint) {

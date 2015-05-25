@@ -33,17 +33,6 @@ class GameScene: SKScene {
     override func didMoveToView(view: SKView) {
         backgroundColor = SKColor.whiteColor()
         let background = SKSpriteNode(imageNamed: "background1")
-//        background.position = CGPoint(x: size.width/2, y: size.height/2)
-//        background.anchorPoint = CGPointZero
-//        background.position = CGPointZero
-//        background.zRotation = CGFloat(M_PI)/8
-        
-        // interesting discovery...
-        // remove the anchorPoint & position,
-        // with the CGPoint set to center- the
-        // background spins across the center.
-        // otherwise, the background spins depending on
-        // where the anchor point is placed.
         
         background.position = CGPoint(x: size.width/2, y: size.height/2)
         background.anchorPoint = CGPoint(x: 0.5, y: 0.5)    // default
@@ -58,9 +47,6 @@ class GameScene: SKScene {
         addChild(zomBee)
         
         debugDrawPlayableArea()
-        
-//        let theSize = background.size
-//        println("Size: \(theSize)")
     }
     
     override func update(currentTime: NSTimeInterval) {
@@ -71,8 +57,7 @@ class GameScene: SKScene {
         }
         lastTimeUpdate = currentTime
         println("\(dt * 1000) milliseconds since last update")
-//        zomBee.position = CGPoint(x: zomBee.position.x + 4, y: zomBee.position.y)
-//        moveSprite(zomBee, velocity: CGPoint(x: zomBeeMovePointsPerSec, y: 0))
+        
         moveSprite(zomBee, velocity: velocity)
         rotateSprite(zomBee, direction: velocity)
         boundsCheckZombie()
@@ -86,8 +71,7 @@ class GameScene: SKScene {
     
     func moveZomBeeToward(location: CGPoint) {
         let offset = location - zomBee.position
-        let length = sqrt(Double(offset.x * offset.x + offset.y * offset.y))
-        let direction = offset / CGFloat(length)
+        let direction = offset.normalized()
         velocity = direction * zomBeeMovePointsPerSec
     }
     

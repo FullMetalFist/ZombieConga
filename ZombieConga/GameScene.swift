@@ -17,6 +17,7 @@ class GameScene: SKScene {
     let zomBeeMovePointsPerSec: CGFloat = 480.0
     var velocity = CGPointZero
     let playableRect: CGRect
+    var lastTouchLocation: CGPoint?
     
     override init(size: CGSize) {
         let maxApsectRatio: CGFloat = 16.0 / 9.0                    // 1
@@ -58,8 +59,18 @@ class GameScene: SKScene {
         lastTimeUpdate = currentTime
         println("\(dt * 1000) milliseconds since last update")
         
-        moveSprite(zomBee, velocity: velocity)
-        rotateSprite(zomBee, direction: velocity)
+        if let lastTouch = lastTouchLocation {
+            let diff = lastTouch - zomBee.position
+            if (diff.length() <= zomBeeMovePointsPerSec * CGFloat(dt)) {
+                zomBee.position = lastTouchLocation!
+                velocity = CGPointZero
+            }
+            else {
+                moveSprite(zomBee, velocity: velocity)
+                rotateSprite(zomBee, direction: velocity)
+            }
+        }
+        
         boundsCheckZombie()
     }
     
@@ -76,6 +87,7 @@ class GameScene: SKScene {
     }
     
     func sceneTouched(touchLocation:CGPoint) {
+        lastTouchLocation = touchLocation
         moveZomBeeToward(touchLocation)
     }
     

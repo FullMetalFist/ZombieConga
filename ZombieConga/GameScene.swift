@@ -18,12 +18,21 @@ class GameScene: SKScene {
     var velocity = CGPointZero
     let playableRect: CGRect
     var lastTouchLocation: CGPoint?
+    let zomBeeRotateRadiansPerSec: CGFloat = 4.0 * π
+    let zomBeeAnimation: SKAction
     
     override init(size: CGSize) {
         let maxApsectRatio: CGFloat = 16.0 / 9.0                    // 1
         let playableHeight = size.width / maxApsectRatio            // 2
         let playableMargin = (size.height - playableHeight) / 2.0   // 3
         playableRect = CGRect(x: 0, y: playableMargin, width: size.width, height: playableHeight)   // 4
+        var textures: [SKTexture] = []
+        for i in 1...4 {
+            textures.append(SKTexture(imageNamed: "zombie\(i)"))
+        }
+        textures.append(textures[2])
+        textures.append(textures[1])
+        zomBeeAnimation = SKAction.animateWithTextures(textures, timePerFrame: 0.1)
         super.init(size: size)  // 5
     }
     
@@ -47,6 +56,12 @@ class GameScene: SKScene {
         
         addChild(zomBee)
         
+        zomBee.runAction(SKAction.repeatActionForever(zomBeeAnimation))
+        
+        runAction(SKAction.repeatActionForever(SKAction.sequence([SKAction.runBlock(spawnEnemy), SKAction.waitForDuration(2.0)])))
+        
+        runAction(SKAction.repeatActionForever(SKAction.sequence([SKAction.runBlock(spawnCat), SKAction.waitForDuration(1.0)])))
+        
         debugDrawPlayableArea()
     }
     
@@ -57,7 +72,7 @@ class GameScene: SKScene {
             dt = 0
         }
         lastTimeUpdate = currentTime
-        println("\(dt * 1000) milliseconds since last update")
+        //println("\(dt * 1000) milliseconds since last update")
         
         if let lastTouch = lastTouchLocation {
             let diff = lastTouch - zomBee.position
@@ -67,7 +82,7 @@ class GameScene: SKScene {
             }
             else {
                 moveSprite(zomBee, velocity: velocity)
-                rotateSprite(zomBee, direction: velocity)
+                rotateSprite(zomBee, direction: velocity, rotateRadiansPerSec: zomBeeRotateRadiansPerSec)
             }
         }
         
@@ -81,9 +96,11 @@ class GameScene: SKScene {
     }
     
     func moveZomBeeToward(location: CGPoint) {
+        startZomBeeAnimation()
         let offset = location - zomBee.position
         let direction = offset.normalized()
         velocity = direction * zomBeeMovePointsPerSec
+        stopZomBeeAnimation()
     }
     
     func sceneTouched(touchLocation:CGPoint) {
@@ -136,7 +153,43 @@ class GameScene: SKScene {
         addChild(shape)
     }
     
-    func rotateSprite(sprite: SKSpriteNode, direction: CGPoint) {
-        sprite.zRotation = CGFloat(atan2(Double(direction.y), Double(direction.x)))
+    func rotateSprite(sprite: SKSpriteNode, direction: CGPoint, rotateRadiansPerSec: CGFloat) {
+        let shortest = shortestAngleBetween(sprite.zRotation, velocity.angle)
+        let amountToRotate = min(rotateRadiansPerSec * CGFloat(dt), abs(shortest))
+        sprite.zRotation += shortest.sign() * amountToRotate
+    }
+    
+    func spawnEnemy() {
+        let enemy = SKSpriteNode(imageNamed: "enemy")
+        enemy.position = CGPoint(x: size.width + enemy.size.width/2, y: CGFloat.random(min: CGRectGetMinY(playableRect) + enemy.size.height/2, max: CGRectGetMaxY(playableRect) - enemy.size.height/2))
+        addChild(enemy)
+        let actionMove = SKAction.moveToX(-enemy.size.width/2, duration: 2.0)
+        let actionRemove = SKAction.removeFromParent()
+        enemy.runAction(SKAction.sequence([actionMove, actionRemove]))
+    }
+    
+    func startZomBeeAnimation() {
+        if zomBee.actionForKey("animation") == nil {
+            zomBee.runAction(SKAction.repeatActionForever(zomBeeAnimation), withKey: "animation")
+        }
+    }
+    
+    func stopZomBeeAnimation() {
+        zomBee.removeActionForKey("animation")
+    }
+    
+    func spawnCat() {
+        // 1
+        let cat = SKSpriteNode(imageNamed: "cat")
+        cat.position = CGPoint(x: CGFloat.random(min: CGRectGetMinX(playableRect), max: CGRectGetMaxX(playableRect)), y: CGFloat.random(min: CGRectGetMinY(playableRect), max: CGRectGetMaxY(playableRect)))
+        cat.setScale(0)
+        addChild(cat)
+        // 2
+        let appear = SKAction.scaleTo(1.0, duration: 0.5)
+        let wait = SKAction.waitForDuration(10.0)
+        let disappear = SKAction.scaleTo(0, duration: 0.5)
+        let removeFromParent = SKAction.removeFromParent()
+        let actions = [appear, wait, disappear, removeFromParent]
+        cat.runAction(SKAction.sequence(actions))
     }
 }

@@ -87,6 +87,7 @@ class GameScene: SKScene {
         }
         
         boundsCheckZombie()
+        //checkCollisions()
     }
     
     func moveSprite(sprite: SKSpriteNode, velocity: CGPoint) {
@@ -221,6 +222,23 @@ class GameScene: SKScene {
                 hitCats.append(cat)
             }
         })
+        for cat in hitCats {
+            zomBeeHitCat(cat)
+        }
         
+        var hitEnemies: [SKSpriteNode] = []
+        enumerateChildNodesWithName("enemy", usingBlock: { (node, _) -> Void in
+            let enemy = node as! SKSpriteNode
+            if CGRectIntersectsRect(CGRectInset(node.frame, 20, 20), self.zomBee.frame) {
+                hitEnemies.append(enemy)
+            }
+        })
+        for enemy in hitEnemies {
+            zomBeeHitEnemy(enemy)
+        }
+    }
+    
+    override func didEvaluateActions() {
+        checkCollisions()
     }
 }

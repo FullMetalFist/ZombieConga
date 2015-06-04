@@ -163,6 +163,7 @@ class GameScene: SKScene {
         let enemy = SKSpriteNode(imageNamed: "enemy")
         enemy.position = CGPoint(x: size.width + enemy.size.width/2, y: CGFloat.random(min: CGRectGetMinY(playableRect) + enemy.size.height/2, max: CGRectGetMaxY(playableRect) - enemy.size.height/2))
         addChild(enemy)
+        enemy.name = "enemy"
         let actionMove = SKAction.moveToX(-enemy.size.width/2, duration: 2.0)
         let actionRemove = SKAction.removeFromParent()
         enemy.runAction(SKAction.sequence([actionMove, actionRemove]))
@@ -179,17 +180,47 @@ class GameScene: SKScene {
     }
     
     func spawnCat() {
-        // 1
         let cat = SKSpriteNode(imageNamed: "cat")
         cat.position = CGPoint(x: CGFloat.random(min: CGRectGetMinX(playableRect), max: CGRectGetMaxX(playableRect)), y: CGFloat.random(min: CGRectGetMinY(playableRect), max: CGRectGetMaxY(playableRect)))
         cat.setScale(0)
         addChild(cat)
-        // 2
+        cat.name = "cat"
+        
         let appear = SKAction.scaleTo(1.0, duration: 0.5)
-        let wait = SKAction.waitForDuration(10.0)
+        
+        cat.zRotation = -π / 16.0
+        let leftWiggle = SKAction.rotateByAngle(π/8.0, duration: 0.5)
+        let rightWiggle = leftWiggle.reversedAction()
+        let fullWiggle = SKAction.sequence([leftWiggle, rightWiggle])
+        
+        let scaleUp = SKAction.scaleBy(1.2, duration: 0.25)
+        let scaleDown = scaleUp.reversedAction()
+        let fullScale = SKAction.sequence([scaleUp, scaleDown, scaleUp, scaleDown])
+        let group = SKAction.group([fullScale, fullWiggle])
+        let groupWait = SKAction.repeatAction(group, count: 10)
+        
         let disappear = SKAction.scaleTo(0, duration: 0.5)
         let removeFromParent = SKAction.removeFromParent()
-        let actions = [appear, wait, disappear, removeFromParent]
+        let actions = [appear, groupWait, disappear, removeFromParent]
         cat.runAction(SKAction.sequence(actions))
+    }
+    
+    func zomBeeHitCat(cat: SKSpriteNode) {
+        cat.removeFromParent()
+    }
+    
+    func zomBeeHitEnemy(enemy: SKSpriteNode) {
+        enemy.removeFromParent()
+    }
+    
+    func checkCollisions() {
+        var hitCats: [SKSpriteNode] = []
+        enumerateChildNodesWithName("cat", usingBlock: { (node, _) -> Void in
+            let cat = node as! SKSpriteNode
+            if CGRectIntersectsRect(cat.frame, self.zomBee.frame) {
+                hitCats.append(cat)
+            }
+        })
+        
     }
 }

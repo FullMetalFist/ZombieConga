@@ -208,10 +208,12 @@ class GameScene: SKScene {
     
     func zomBeeHitCat(cat: SKSpriteNode) {
         cat.removeFromParent()
+        runAction(SKAction.playSoundFileNamed("hitCat.wav", waitForCompletion: false))
     }
     
     func zomBeeHitEnemy(enemy: SKSpriteNode) {
         enemy.removeFromParent()
+        runAction(SKAction.playSoundFileNamed("hitCatLady.wav", waitForCompletion: false))
     }
     
     func checkCollisions() {

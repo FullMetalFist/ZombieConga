@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		7CE2E5261B0CE14600A5C621 /* MyUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE2E5251B0CE14600A5C621 /* MyUtils.swift */; };
+		7CEC3F321B22839E00E40D1D /* backgroundMusic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7CEC3F2D1B22839E00E40D1D /* backgroundMusic.mp3 */; };
+		7CEC3F331B22839E00E40D1D /* hitCat.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7CEC3F2E1B22839E00E40D1D /* hitCat.wav */; };
+		7CEC3F341B22839E00E40D1D /* hitCatLady.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7CEC3F2F1B22839E00E40D1D /* hitCatLady.wav */; };
+		7CEC3F351B22839E00E40D1D /* lose.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7CEC3F301B22839E00E40D1D /* lose.wav */; };
+		7CEC3F361B22839E00E40D1D /* win.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7CEC3F311B22839E00E40D1D /* win.wav */; };
 		7CF3762B1AF93A4C009B0085 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF3762A1AF93A4C009B0085 /* AppDelegate.swift */; };
 		7CF3762D1AF93A4C009B0085 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7CF3762C1AF93A4C009B0085 /* GameScene.sks */; };
 		7CF3762F1AF93A4C009B0085 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF3762E1AF93A4C009B0085 /* GameScene.swift */; };
@@ -36,6 +41,11 @@
 
 /* Begin PBXFileReference section */
 		7CE2E5251B0CE14600A5C621 /* MyUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyUtils.swift; sourceTree = "<group>"; };
+		7CEC3F2D1B22839E00E40D1D /* backgroundMusic.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = backgroundMusic.mp3; sourceTree = "<group>"; };
+		7CEC3F2E1B22839E00E40D1D /* hitCat.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hitCat.wav; sourceTree = "<group>"; };
+		7CEC3F2F1B22839E00E40D1D /* hitCatLady.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hitCatLady.wav; sourceTree = "<group>"; };
+		7CEC3F301B22839E00E40D1D /* lose.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = lose.wav; sourceTree = "<group>"; };
+		7CEC3F311B22839E00E40D1D /* win.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = win.wav; sourceTree = "<group>"; };
 		7CF376251AF93A4C009B0085 /* ZombieConga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZombieConga.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CF376291AF93A4C009B0085 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7CF3762A1AF93A4C009B0085 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -74,6 +84,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7CEC3F2C1B22839E00E40D1D /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				7CEC3F2D1B22839E00E40D1D /* backgroundMusic.mp3 */,
+				7CEC3F2E1B22839E00E40D1D /* hitCat.wav */,
+				7CEC3F2F1B22839E00E40D1D /* hitCatLady.wav */,
+				7CEC3F301B22839E00E40D1D /* lose.wav */,
+				7CEC3F311B22839E00E40D1D /* win.wav */,
+			);
+			name = Sounds;
+			path = ../Images/Sounds;
+			sourceTree = "<group>";
+		};
 		7CF3761C1AF93A4C009B0085 = {
 			isa = PBXGroup;
 			children = (
@@ -97,6 +120,7 @@
 			children = (
 				7CF3764E1AF93FE5009B0085 /* Images */,
 				7CF376541AF93FE5009B0085 /* sprites.atlas */,
+				7CEC3F2C1B22839E00E40D1D /* Sounds */,
 				7CF3762A1AF93A4C009B0085 /* AppDelegate.swift */,
 				7CF3762C1AF93A4C009B0085 /* GameScene.sks */,
 				7CF3762E1AF93A4C009B0085 /* GameScene.swift */,
@@ -228,8 +252,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7CEC3F321B22839E00E40D1D /* backgroundMusic.mp3 in Resources */,
 				7CF3765A1AF93FE5009B0085 /* sprites.atlas in Resources */,
 				7CF376391AF93A4C009B0085 /* LaunchScreen.xib in Resources */,
+				7CEC3F361B22839E00E40D1D /* win.wav in Resources */,
+				7CEC3F351B22839E00E40D1D /* lose.wav in Resources */,
+				7CEC3F331B22839E00E40D1D /* hitCat.wav in Resources */,
+				7CEC3F341B22839E00E40D1D /* hitCatLady.wav in Resources */,
 				7CF376571AF93FE5009B0085 /* MainMenu.png in Resources */,
 				7CF376361AF93A4C009B0085 /* Images.xcassets in Resources */,
 				7CF3762D1AF93A4C009B0085 /* GameScene.sks in Resources */,

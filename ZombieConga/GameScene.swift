@@ -20,6 +20,8 @@ class GameScene: SKScene {
     var lastTouchLocation: CGPoint?
     let zomBeeRotateRadiansPerSec: CGFloat = 4.0 * π
     let zomBeeAnimation: SKAction
+    let catCollisionSound: SKAction = SKAction.playSoundFileNamed("hitCat.wav", waitForCompletion: false)
+    let enemyCollisionSound: SKAction = SKAction.playSoundFileNamed("hitCatLady.wav", waitForCompletion: false)
     
     override init(size: CGSize) {
         let maxApsectRatio: CGFloat = 16.0 / 9.0                    // 1
@@ -208,12 +210,12 @@ class GameScene: SKScene {
     
     func zomBeeHitCat(cat: SKSpriteNode) {
         cat.removeFromParent()
-        runAction(SKAction.playSoundFileNamed("hitCat.wav", waitForCompletion: false))
+        runAction(catCollisionSound)
     }
     
     func zomBeeHitEnemy(enemy: SKSpriteNode) {
         enemy.removeFromParent()
-        runAction(SKAction.playSoundFileNamed("hitCatLady.wav", waitForCompletion: false))
+        runAction(enemyCollisionSound)
     }
     
     func checkCollisions() {

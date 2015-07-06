@@ -156,6 +156,12 @@ class GameScene: SKScene {
         addChild(shape)
     }
     
+//    func rotateSprite(sprite: SKSpriteNode, direction: CGPoint, rotateRadiansPerSec: CGFloat) {
+//        let shortest = shortestAngleBetween(sprite.zRotation, velocity.angle)
+//        let amountToRotate = min(rotateRadiansPerSec * CGFloat(dt), abs(shortest))
+//        sprite.zRotation += shortest.sign() * amountToRotate
+//    }
+    
     func rotateSprite(sprite: SKSpriteNode, direction: CGPoint, rotateRadiansPerSec: CGFloat) {
         let shortest = shortestAngleBetween(sprite.zRotation, velocity.angle)
         let amountToRotate = min(rotateRadiansPerSec * CGFloat(dt), abs(shortest))
@@ -214,7 +220,7 @@ class GameScene: SKScene {
     }
     
     func zomBeeHitEnemy(enemy: SKSpriteNode) {
-        enemy.removeFromParent()
+        enemy.removeFromParent()    // this makes crazy cat lady disappear!
         runAction(enemyCollisionSound)
     }
     
@@ -245,4 +251,34 @@ class GameScene: SKScene {
     override func didEvaluateActions() {
         checkCollisions()
     }
+    
+    // challenge 1
+    // what action constructor would you use to make a sprite follow a certain predefined path?
+    // SKAction.followPath()
+    // what action constructor would you use to make a sprite 50% transparent regardless of what its current transparency settings are?
+    /* sprite.runAction(SKAction.repeatActionForever(
+        SKAction.sequence([
+            SKAction.fadeOutWithDuration(1.0),
+            SKAction.fadeInWithDuration(1.0)
+            ])
+        ))
+    */
+    // SKAction.sequence([SKAction.fadeAlphaBy(X.X, duration:X.X), SKAction.fadeAlphaBy(X.X, duration:X.X)])
+    /* sprite.runAction(SKAction.repeatActionForever(
+        SKAction.sequence([
+            SKAction.fadeAlphaBy(-0.75, duration: 1.0),
+            SKAction.fadeAlphaBy(0.75, duration: 1.0),
+            ])
+        ))
+    */
+    // SKAction.sequence([SKAction.fadeAlphaTo(0.5, duration:1.0), SKAction.fadeAlphaTo(1.0, duration:1.0)])
+    /* sprite.runAction(SKAction.repeatActionForever(
+        SKAction.sequence([
+            SKAction.fadeAlphaTo(0.25, duration: 1.0),
+            SKAction.fadeAlphaTo(1.0, duration: 1.0),
+            ])
+        ))
+    */
+    // what are custom actions and how do they work at a high level?
+    // custom actions SKAction.customActionWithDuration() work by chaining actions within a block and performing them for a certain duration.
 }

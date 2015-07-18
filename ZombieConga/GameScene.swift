@@ -22,8 +22,6 @@ class GameScene: SKScene {
     let zomBeeAnimation: SKAction
     let catCollisionSound: SKAction = SKAction.playSoundFileNamed("hitCat.wav", waitForCompletion: false)
     let enemyCollisionSound: SKAction = SKAction.playSoundFileNamed("hitCatLady.wav", waitForCompletion: false)
-    var invincible = false
-    let catMovePointsPerSec: CGFloat = 480.0
     
     override init(size: CGSize) {
         let maxApsectRatio: CGFloat = 16.0 / 9.0                    // 1
@@ -44,16 +42,6 @@ class GameScene: SKScene {
         fatalError("init(coder:) has not been implemented")         // 6
     }
     
-    func debugDrawPlayableArea() {
-        let shape = SKShapeNode()
-        let path = CGPathCreateMutable()
-        CGPathAddRect(path, nil, playableRect)
-        shape.path = path
-        shape.strokeColor = SKColor.redColor()
-        shape.lineWidth = 4.0
-        addChild(shape)
-    }
-    
     override func didMoveToView(view: SKView) {
         backgroundColor = SKColor.whiteColor()
         let background = SKSpriteNode(imageNamed: "background1")
@@ -64,7 +52,6 @@ class GameScene: SKScene {
         addChild(background)
         
         zomBee.position = CGPoint(x: 400, y: 400)
-        zomBee.zPosition = 100
         zomBee.anchorPoint = CGPoint(x: 0, y: 0)
         //        zomBee.size = CGSizeMake(400, 400)  // more control
         //        zomBee.setScale(2.0)                // easier, default
@@ -103,7 +90,6 @@ class GameScene: SKScene {
         
         boundsCheckZombie()
         //checkCollisions()
-        moveTrain()
     }
     
     func moveSprite(sprite: SKSpriteNode, velocity: CGPoint) {
@@ -137,6 +123,7 @@ class GameScene: SKScene {
         sceneTouched(touchLocation)
     }
     
+    // bounds checking
     func boundsCheckZombie() {
         let bottomLeft = CGPoint(x: 0, y: CGRectGetMinY(playableRect))
         let topRight = CGPoint(x: size.width, y: CGRectGetMaxY(playableRect))
@@ -158,6 +145,22 @@ class GameScene: SKScene {
             velocity.y = -velocity.y
         }
     }
+    
+    func debugDrawPlayableArea() {
+        let shape = SKShapeNode()
+        let path = CGPathCreateMutable()
+        CGPathAddRect(path, nil, playableRect)
+        shape.path = path
+        shape.strokeColor = SKColor.redColor()
+        shape.lineWidth = 4.0
+        addChild(shape)
+    }
+    
+//    func rotateSprite(sprite: SKSpriteNode, direction: CGPoint, rotateRadiansPerSec: CGFloat) {
+//        let shortest = shortestAngleBetween(sprite.zRotation, velocity.angle)
+//        let amountToRotate = min(rotateRadiansPerSec * CGFloat(dt), abs(shortest))
+//        sprite.zRotation += shortest.sign() * amountToRotate
+//    }
     
     func rotateSprite(sprite: SKSpriteNode, direction: CGPoint, rotateRadiansPerSec: CGFloat) {
         let shortest = shortestAngleBetween(sprite.zRotation, velocity.angle)
@@ -212,34 +215,13 @@ class GameScene: SKScene {
     }
     
     func zomBeeHitCat(cat: SKSpriteNode) {
+        cat.removeFromParent()
         runAction(catCollisionSound)
-        
-        cat.name = "train"
-        cat.removeAllActions()
-        cat.setScale(1.0)
-        cat.zRotation = 0
-        
-        let turnGreen = SKAction.colorizeWithColor(UIColor.greenColor(), colorBlendFactor: 1.0, duration: 0.2)
-        cat.runAction(turnGreen)
     }
     
     func zomBeeHitEnemy(enemy: SKSpriteNode) {
+        enemy.removeFromParent()    // this makes crazy cat lady disappear!
         runAction(enemyCollisionSound)
-        
-        invincible = true
-        
-        let blinkTimes = 10.0
-        let duration = 3.0
-        let blinkAction = SKAction.customActionWithDuration(duration) { node, elapsedTime in
-            let slice = duration / blinkTimes
-            let remainder = Double(elapsedTime) % slice
-            node.hidden = remainder > slice / 2
-        }
-        let setHidden = SKAction.runBlock() {
-            self.zomBee.hidden = false
-            self.invincible = false
-        }
-        zomBee.runAction(SKAction.sequence([blinkAction, setHidden]))
     }
     
     func checkCollisions() {
@@ -252,9 +234,6 @@ class GameScene: SKScene {
         })
         for cat in hitCats {
             zomBeeHitCat(cat)
-        }
-        if invincible {
-            return
         }
         
         var hitEnemies: [SKSpriteNode] = []
@@ -271,23 +250,6 @@ class GameScene: SKScene {
     
     override func didEvaluateActions() {
         checkCollisions()
-    }
-    
-    func moveTrain() {
-        var targetPosition = zomBee.position
-        enumerateChildNodesWithName("train") { node, stop in
-            if !node.hasActions() {
-                
-                let actionDuration = 0.3
-                let offset = targetPosition - node.position
-                let direction = offset.normalized()
-                let amountToMovePerSec = direction * self.catMovePointsPerSec
-                let amountToMove = amountToMovePerSec * CGFloat(actionDuration)
-                let moveAction = SKAction.moveByX(amountToMove.x, y: amountToMove.y, duration: actionDuration)
-                node.runAction(moveAction)
-            }
-            targetPosition = node.position
-        }
     }
     
     // challenge 1

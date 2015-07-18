@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>302E424F-0EAD-4D3A-923A-BE85CACD7AD2</string>
 	<key>IDESourceControlProjectName</key>
-	<string>ZombieConga</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>F3F2006E22954A289CEBC2ACFC2763B85BDDFDD2</key>
 		<string>github.com:FullMetalFist/ZombieConga.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>ZombieConga.xcodeproj</string>
+	<string>ZombieConga.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>F3F2006E22954A289CEBC2ACFC2763B85BDDFDD2</key>

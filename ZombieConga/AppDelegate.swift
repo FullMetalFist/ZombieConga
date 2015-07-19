@@ -12,10 +12,16 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
-
+    var gameViewController: GameViewController?
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        gameViewController = GameViewController(nibName: nil, bundle: nil)
+        window?.backgroundColor = UIColor.whiteColor()
+        window?.rootViewController = gameViewController
+        window?.makeKeyAndVisible()
+        
         return true
     }
 
